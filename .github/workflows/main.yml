@@ -57,7 +57,7 @@ jobs:
           name: lwjgl
 
       - name: Build Release ${{matrix.arch}} .apk
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
+        if: github.repository_owner == 'Michatec' && github.ref_name == 'main_v3'
         run: |
           chmod +x gradlew
           ./gradlew app:assemblerelease -Darch=${{matrix.arch}}
@@ -68,7 +68,7 @@ jobs:
           ./gradlew app:assembleDebug -Darch=${{matrix.arch}}
 
       - name: Upload Release
-        if: github.repository_owner == 'Vera-Firefly' && github.ref_name == 'main_v3'
+        if: github.repository_owner == 'Michatec' && github.ref_name == 'main_v3'
         uses: actions/upload-artifact@v4
         with:
           name: PGW-release-${{matrix.arch}}
@@ -102,7 +102,7 @@ jobs:
           java-version: '17'
 
       - name: Set IS_OFFICIAL if in the Creator Repository
-        if: github.repository_owner == 'Vera-Firefly'
+        if: github.repository_owner == 'Michatec'
         run: echo "IS_OFFICIAL=true" >> $GITHUB_ENV
 
       - name: Get JSPH
