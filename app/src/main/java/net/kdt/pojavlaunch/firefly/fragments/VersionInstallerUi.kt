@@ -419,7 +419,8 @@ internal class AddonCardAdapter(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-                this.text = if (option?.summary.isNullOrBlank()) text else "$text\n${option!!.summary}"
+                val summary = option?.summary
+                this.text = if (summary.isNullOrBlank()) text else "$text\n$summary"
                 setTextColor(context.getColor(R.color.primary_text))
                 setTextSize(
                     android.util.TypedValue.COMPLEX_UNIT_PX,

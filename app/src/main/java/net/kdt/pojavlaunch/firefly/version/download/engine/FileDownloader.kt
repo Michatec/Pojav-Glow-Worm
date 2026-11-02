@@ -237,7 +237,7 @@ internal class FileDownloader(
      */
     private fun checkStatus(response: Response, rangeFrom: Long, rangedRequest: Boolean, source: SourceSet.Source, chain: SegmentChain): ResponseBody {
         val code = response.code
-        val body = response.body ?: throw HttpResultException(code, "Empty body")
+        val body = response.body
         when (code) {
             416 -> throw AbandonedSegmentException()
 

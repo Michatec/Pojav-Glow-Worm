@@ -90,7 +90,7 @@ object VersionCatalog {
             try {
                 VersionHttpClients.DOWNLOAD_OKHTTP_CLIENT.newCall(createVersionRequestBuilder(url).build()).execute().use { response ->
                     if (!response.isSuccessful) throw IOException("HTTP ${response.code} for $url")
-                    return response.body?.string()?.takeIf { it.isNotBlank() }
+                    return response.body.string().takeIf { it.isNotBlank() }
                         ?: throw IOException("Empty response from $url")
                 }
             } catch (error: Throwable) {

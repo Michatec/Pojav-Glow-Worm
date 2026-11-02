@@ -131,6 +131,7 @@ object PgwVersionIcons {
     }
 
     fun webpFormat(): android.graphics.Bitmap.CompressFormat = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        @Suppress("DEPRECATION")
         android.graphics.Bitmap.CompressFormat.WEBP
     } else {
         android.graphics.Bitmap.CompressFormat.WEBP_LOSSY

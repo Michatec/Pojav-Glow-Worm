@@ -361,10 +361,12 @@ object ForgeLikeInstaller {
             if (argument.startsWith("--")) {
                 key?.let { options[it] = "" }
                 key = argument.removePrefix("--")
-            } else if (key != null) {
-                options[key!!] = parseLiteral(baseDir, argument, variables)
-                    ?: throw IOException("Invalid processor option: $argument")
-                key = null
+            } else {
+                key?.let { k ->
+                    options[k] = parseLiteral(baseDir, argument, variables)
+                        ?: throw IOException("Invalid processor option: $argument")
+                    key = null
+                }
             }
         }
         key?.let { options[it] = "" }
