@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [ "all", "arm", "arm64", "x86", "x86_64" ]
@@ -20,11 +20,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Get Jre
         uses: dawidd6/action-download-artifact@v3
@@ -81,7 +81,7 @@ jobs:
           path: app/build/outputs/apk/debug/*
 
   buildnoruntime:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         arch: [ "all", "arm", "arm64", "x86", "x86_64" ]
@@ -95,11 +95,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Set IS_OFFICIAL if in the Creator Repository
         if: github.repository_owner == 'Michatec'
