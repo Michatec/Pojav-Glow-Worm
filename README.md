@@ -2,10 +2,8 @@
 
 <img src="https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="130" height="150" alt="PojavLauncher logo">
 
-[![Android CI](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions/workflows/main.yml/badge.svg)](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions)
+[![Android CI](https://github.com/Michatec/Pojav-Glow-Worm/actions/workflows/main.yml/badge.svg)](https://github.com/Michatec/Pojav-Glow-Worm/actions)
 ![Downloads](https://img.shields.io/github/downloads/Vera-Firefly/Pojav-Glow-Worm/total)
-
-* <a href="/README-ZH_CN.md">中文</a>
 
 * From [Boardwalk](https://github.com/zhuowei/Boardwalk)'s ashes here comes PojavLauncher!
 
@@ -43,7 +41,7 @@
 
 You can get PojavLauncher via three methods:
 
-1. You can get the prebuilt app from [stable releases](https://github.com/Vera-Firefly/Pojav-Glow-Worm/releases) or [automatic builds](https://github.com/Vera-Firefly/Pojav-Glow-Worm/actions).
+1. You can get the prebuilt app from [stable releases](https://github.com/Michatec/Pojav-Glow-Worm/releases) or [automatic builds](https://github.com/Michatec/Pojav-Glow-Worm/actions).
 
 2. You can [build](#building) from source.
 ## Building
@@ -68,24 +66,6 @@ If you want to build from source code, follow the steps below.
 
 * This modified version of lwjgl uses the latest content from [Vera-Firefly](https://github.com/Vera-Firefly) [lwjgl3-build](https://github.com/Vera-Firefly/lwjgl3-build) repository for automated builds
 ### The Launcher
-* Build GLFW stub (If need):
-```
-git submodule update --init --recursive
-```
-or
-```
-chmod +x scripts/UpdateSubmodule.sh
-./scripts/UpdateSubmodule.sh
-```
-then run:
-```
-cd lwjgl3-build
-./gradlew :jre_lwjgl3glfw:build
-```
-```
-mv lwjgl3/* ../app_pojavlauncher/src/main/assets/components/lwjgl3
-cd ../
-```
 * Build the launcher
 ```
 ./gradlew :app_pojavlauncher:assembleDebug
@@ -94,7 +74,7 @@ cd ../
 (If you are having trouble with `mv` permissions, try using `sudo mv`)
 
 ## Current status
-- [x] ~~OpenJDK 9 Mobile port: ARM32, ARM64, x86, x86_64.~~ Replaced by JRE8.
+- [x] Replaced by JRE8.
 - [x] [OpenJDK 8](https://github.com/openjdk/jdk8u) Mobile port: ARM32, ARM64, x86, x86_64
 - [x] [OpenJDK 11](https://github.com/openjdk/jdk11u) Mobile port: ARM32, ARM64, x86, x86_64
 - [x] [OpenJDK 17](https://github.com/openjdk/jdk17u) Mobile port: ARM32, ARM64, x86, x86_64
@@ -112,7 +92,6 @@ cd ../
 - [x] New input pipe rewritten to native code to boost performance.
 - [x] Rewritten entire controls system (thanks to @Mathias-Boulay)
 - [x] Virtual terminal system
-- [ ] More to come!
 
 ## Known Issues
 - Controller mods aren't working.
@@ -121,7 +100,7 @@ cd ../
 - Probably more, that's why we have a bug tracker
 
 ## License
-- Pojav Glow·Worm is licensed under [GNU GPLv3](https://github.com/Vera-Firefly/Pojav-Glow-Worm/blob/main_v3/LICENSE).
+- Pojav Glow·Worm is licensed under [GNU GPLv3](https://github.com/Michatec/Pojav-Glow-Worm/blob/main_v3/LICENSE).
 
 ## Contributing
 Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the translation too!
@@ -148,7 +127,3 @@ Any code change to this repository should be submitted as a pull request. The de
 - [terminal-emulator](https://github.com/termux/termux-app/tree/master/terminal-emulator): [Apache 2.0](https://github.com/termux/termux-app/blob/master/LICENSE.md).
 - Loader card icons are derived from [Zalith Launcher 2](https://github.com/ZalithLauncher/ZalithLauncher), licensed under GPLv3.
 - Thanks to [MCHeads](https://mc-heads.net) for providing Minecraft avatars.
-
-## More
-* If you want a different experience, try some of the other good ones:[ZalithLauncher](https://github.com/ZalithLauncher/ZalithLauncher)
-

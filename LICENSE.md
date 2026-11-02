@@ -1,11 +1,15 @@
-                    GNU GENERAL PUBLIC LICENSE
-                       Version 3, 29 June 2007
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+=====================
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
- Everyone is permitted to copy and distribute verbatim copies
- of this license document, but changing it is not allowed.
 
-                            Preamble
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+--------------------------------
+
+Preamble
 
   The GNU General Public License is a free, copyleft license for
 software and other kinds of works.
@@ -631,8 +635,8 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    Pojav Glow·Worm with more practical functions, A modified Launcher from the PojavLauncher team
-    Copyright (C) 2021  Vera-Firefly
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -652,7 +656,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    Pojav-Glow-Worm  Copyright (C) 2021  Vera-Firefly
+    <program>  Copyright (C) <year>  <name of author>
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.

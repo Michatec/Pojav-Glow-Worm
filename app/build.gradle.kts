@@ -6,15 +6,14 @@ import com.android.build.gradle.tasks.MergeSourceSetFolders
 import com.github.megatronking.stringfog.plugin.StringFogExtension
 import com.github.megatronking.stringfog.plugin.StringFogMode
 import com.github.megatronking.stringfog.plugin.kg.RandomKeyGenerator
-import java.util.Date
-import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Properties
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android") version "2.2.10"
-    id("org.jetbrains.kotlin.plugin.compose") version "2.2.10"
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 apply(plugin = "stringfog")
 
@@ -33,7 +32,7 @@ val curseForgeApiKey = System.getenv("CURSEFORGE_API_KEY") ?: localProperty?.get
 
 configure<StringFogExtension> {
     implementation = "com.github.megatronking.stringfog.xor.StringFogImpl"
-    fogPackages = arrayOf("$appPackageName")
+    fogPackages = arrayOf(appPackageName)
     kg = RandomKeyGenerator()
     mode = StringFogMode.bytes
 }
@@ -43,52 +42,32 @@ fun currentDate(): String {
     return dateFormat.format(Date())
 }
 
-fun versionName(): String {
-    val tag = ByteArrayOutputStream()
-    val branch = ByteArrayOutputStream()
-    val tagPartCommit = ByteArrayOutputStream()
-
-    try {
-        exec {
-            commandLine("git", "describe", "--tags")
+fun gitOutput(vararg args: String): String {
+    return try {
+        providers.exec {
+            commandLine(*args)
             isIgnoreExitValue = true
-            standardOutput = tag
-        }
-    } catch (e: Exception) {
+        }.standardOutput.asText.get().trim()
+    } catch (_: Exception) {
+        ""
+    }
+}
+
+fun versionName(): String {
+    var tag = gitOutput("git", "describe", "--tags")
+    if (tag.isEmpty()) {
+        tag = gitOutput("git", "describe", "--always", "--tags")
     }
 
-    if (tag.toString() == "") {
-        try {
-            exec {
-                commandLine("git", "describe", "--always", "--tags")
-                isIgnoreExitValue = true
-                standardOutput = tagPartCommit
-            }
-        } catch (e: Exception) {
-        }
-    }
-
-    val tagString: String = if (tag.toString() != "") {
+    val tagString: String = if (tag.isNotEmpty()) {
         "${currentVersion}-${tag}"
     } else {
-        if (tagPartCommit.toString().trim() == "") {
-            "${currentVersion}-${currentDate()}"
-        } else {
-            "${currentVersion}-${currentDate()}-${tagPartCommit.toString().trim()}"
-        }
+        "${currentVersion}-${currentDate()}"
     }
 
-    try {
-        exec {
-            commandLine("git", "branch", "--show-current")
-            isIgnoreExitValue = true
-            standardOutput = branch
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-
-    return tagString.trim().replace("-g", "-") + "-" + branch.toString().trim()
+    val branch = gitOutput("git", "branch", "--show-current")
+    val result = tagString.trim().replace("-g", "-")
+    return if (branch.isNotEmpty()) "$result-$branch" else result
 }
 
 fun processOutput(variant: Variant, output: VariantOutput) {
@@ -158,7 +137,7 @@ fun shouldDeleteJreFile(file: File, arch: String): Boolean {
 android {
     namespace = appPackageName
 
-    compileSdk = 35
+    compileSdk = 37
 
     lint {
         abortOnError = false
@@ -181,8 +160,8 @@ android {
 
     defaultConfig {
         applicationId = appPackageName
-        minSdk = 26
-        targetSdk = 28
+        minSdk = 28
+        targetSdk = 37
         versionCode = 9999999
         versionName = versionName()
     }
@@ -206,7 +185,7 @@ android {
             isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
+                getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("releaseBuild")
@@ -259,13 +238,9 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -276,27 +251,39 @@ android {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2026.06.01"))
+    implementation(platform("androidx.compose:compose-bom:2026.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.activity:activity-compose:1.10.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
-    implementation("commons-codec:commons-codec:1.15")
-    implementation("androidx.preference:preference:1.2.0")
+    implementation("commons-codec:commons-codec:1.23.0")
+    implementation("androidx.preference:preference:1.2.1")
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
-    implementation("androidx.viewpager2:viewpager2:1.1.0-beta01")
-    implementation("androidx.annotation:annotation:1.5.0")
-    implementation("androidx.documentfile:documentfile:1.0.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation("androidx.annotation:annotation:1.11.0")
+    implementation("androidx.documentfile:documentfile:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.2")
 
-    implementation("com.bytedance:bytehook:1.0.10")
+    implementation("com.bytedance:bytehook:1.1.2")
     implementation("com.jakewharton:process-phoenix:3.0.0")
     implementation("com.github.duanhong169:checkerboarddrawable:1.0.2")
     implementation("com.github.PojavLauncherTeam:portrait-sdp:ed33e89cbc")
@@ -305,16 +292,16 @@ dependencies {
     implementation("com.github.Mathias-Boulay:android_gamepad_remapper:2.0.3")
     implementation("com.github.Mathias-Boulay:virtual-joystick-android:1.14")
     implementation("com.github.megatronking.stringfog:xor:5.0.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.1")
 
-    implementation("net.sourceforge.htmlcleaner:htmlcleaner:2.6.1")
+    implementation("net.sourceforge.htmlcleaner:htmlcleaner:2.29")
 
-    implementation("org.commonmark:commonmark:0.18.2")
-    implementation("org.commonmark:commonmark-ext-gfm-tables:0.18.2")
+    implementation("org.commonmark:commonmark:0.32.0")
+    implementation("org.commonmark:commonmark-ext-gfm-tables:0.32.0")
     implementation("org.greenrobot:eventbus:3.3.1")
-    implementation("org.tukaani:xz:1.8")
+    implementation("org.tukaani:xz:1.12")
 
-    implementation("top.fifthlight.touchcontroller:proxy-client-android:0.0.4")
+    implementation("top.fifthlight.touchcontroller:proxy-client-android:0.0.8")
 
     implementation("com.moandjiezana.toml:toml4j:0.7.2") {
         exclude(group = "com.google.code.gson", module = "gson")
@@ -334,5 +321,5 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.5.1")
 }
