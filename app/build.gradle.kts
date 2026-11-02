@@ -147,7 +147,7 @@ android {
         create("releaseBuild") {
             storeFile = file("key-store.jks")
             storePassword = pwd
-            keyAlias = "Firefly"
+            keyAlias = "key0"
             keyPassword = pwd
         }
         create("customDebug") {
