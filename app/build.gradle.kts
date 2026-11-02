@@ -164,6 +164,9 @@ android {
         targetSdk = 37
         versionCode = 9999999
         versionName = versionName()
+        ndk {
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a"))
+        }
     }
 
     buildTypes {
